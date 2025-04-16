@@ -23,25 +23,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ]);
-        Bouncer::assign('salarie')->to($user);
-
-        $user2 = User::firstOrCreate([
-            'first_name' => 'Jimmy',
-            'last_name' => 'Dorbais',
-            'email' => 'jimmy.dorbais@usgph.com',
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
-        Bouncer::assign('salarie')->to($user2);
-
-        $user3 = User::firstOrCreate([
-            'first_name' => 'Nathan',
-            'last_name' => 'Richard',
-            'email' => 'nathan.richard@usgph.com',
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
-        Bouncer::assign('salarie')->to($user3);
+        Bouncer::assign('user')->to($user);
 
         $admin = User::firstOrCreate([
             'first_name' => 'test',
@@ -52,13 +34,9 @@ class DatabaseSeeder extends Seeder
         ]);
         Bouncer::assign('admin')->to($admin);
 
+        // call seeders here
         $this->call([
-            LieuSeeder::class,
-            CategorieSeeder::class,
-            TacheSeeder::class,
-            PlanningSeeder::class,
-            ArchiveSeeder::class,
-            MotifSeeder::class,
+
         ]);
     }
 }
