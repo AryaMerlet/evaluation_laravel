@@ -8,7 +8,6 @@ use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\RedirectResponse;
 use InvalidArgumentException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -67,13 +66,13 @@ class DashboardController extends Controller
                 ? ($heuresReservees / $totalHoursAvailablePerSalle) * 100
                 : 0;
 
-            $salleUtilization->push((object)[
+            $salleUtilization->push((object) [
                 'id' => $salle->id,
                 'nom' => $salle->nom,
                 'capacite' => $salle->capacite,
                 'heuresDisponibles' => $totalHoursAvailablePerSalle,
                 'heuresReservees' => $heuresReservees,
-                'pourcentageUtilisation' => $pourcentageUtilisation
+                'pourcentageUtilisation' => $pourcentageUtilisation,
             ]);
         }
 
@@ -103,9 +102,9 @@ class DashboardController extends Controller
 
         // Get future and past reservations for the current user
         $futureReservations = Reservation::where('user_id', $userId)
-            ->where(function($query) use ($today) {
+            ->where(function ($query) use ($today) {
                 $query->where('date', '>', $today)
-                    ->orWhere(function($query) use ($today) {
+                    ->orWhere(function ($query) use ($today) {
                         $query->where('date', $today)
                             ->where('heure_debut', '>', Carbon::now()->format('H:i:s'));
                     });
@@ -116,9 +115,9 @@ class DashboardController extends Controller
             ->get();
 
         $pastReservations = Reservation::where('user_id', $userId)
-            ->where(function($query) use ($today) {
+            ->where(function ($query) use ($today) {
                 $query->where('date', '<', $today)
-                    ->orWhere(function($query) use ($today) {
+                    ->orWhere(function ($query) use ($today) {
                         $query->where('date', $today)
                             ->where('heure_debut', '<=', Carbon::now()->format('H:i:s'));
                     });

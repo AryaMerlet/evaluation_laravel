@@ -1,14 +1,12 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Reunion\ReservationController;
 use App\Http\Controllers\Reunion\SalleController;
-use App\Http\Controllers\ProfileController;
-use App\Models\User;
 use App\Models\Reunion\Reservation;
 use App\Models\Reunion\Salle;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -23,6 +21,8 @@ Route::middleware('auth')->group(function () {
     //
     // salle
     //
+    Route::get('/salle/corbeille', [SalleController::class, 'corbeille'])->name('salle.corbeille');
+
     Route::get('/salle/{salle_id}/undelete', [SalleController::class, 'undelete'])->name('salle.undelete');
     Route::bind('salle_id', function ($salle_id) {
         return salle::onlyTrashed()->find($salle_id);

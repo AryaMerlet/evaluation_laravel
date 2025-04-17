@@ -2,11 +2,8 @@
 
 namespace App\Http\Services\Reunion;
 
-use App\Http\Repositories\Reunion\SalleRepository;;
+use App\Http\Repositories\Reunion\SalleRepository;
 use App\Models\Reunion\Salle;
-use Auth;
-use DB;
-use Log;
 
 class SalleService
 {
@@ -17,6 +14,7 @@ class SalleService
 
     /**
      * Constructor
+     *
      * @param  SalleRepository  $repository
      */
     public function __construct(SalleRepository $repository)
@@ -26,8 +24,10 @@ class SalleService
 
     /**
      * Store a new model instance
+     *
      * @param  array<mixed>  $inputs
-     * @return  Salle
+     *
+     * @return Salle
      */
     public function store(array $inputs): Salle
     {
@@ -40,9 +40,11 @@ class SalleService
 
     /**
      * Update the model instance
+     *
      * @param  Salle  $salle
      * @param  array<mixed>  $inputs
-     * @return  Salle
+     *
+     * @return Salle
      */
     public function update(Salle $salle, array $inputs): Salle
     {
@@ -55,7 +57,9 @@ class SalleService
 
     /**
      * Delete the model instance
+     *
      * @param  Salle  $salle
+     *
      * @return bool|null
      */
     public function destroy(Salle $salle)
@@ -69,7 +73,9 @@ class SalleService
 
     /**
      * Undelete the model instance
+     *
      * @param  Salle  $salle
+     *
      * @return void
      */
     public function undelete(Salle $salle)
@@ -83,6 +89,7 @@ class SalleService
 
     /**
      * Return a JSON for index datatable
+     *
      * @return string|false|void — a JSON encoded string on success or FALSE on failure
      */
     public function json()

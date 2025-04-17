@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Reunion\Reservation;
-use App\Models\User;
 use App\Models\Reunion\Salle;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 use Log;
 
 class ReservationSeeder extends Seeder
@@ -23,6 +23,7 @@ class ReservationSeeder extends Seeder
 
         if (!$salarie) {
             $this->command->info('Salarie user not found. Please run UserSeeder first.');
+
             return;
         }
 
@@ -31,6 +32,7 @@ class ReservationSeeder extends Seeder
 
         if ($salles->isEmpty()) {
             $this->command->info('No salles found. Please run SalleSeeder first.');
+
             return;
         }
 
@@ -79,7 +81,7 @@ class ReservationSeeder extends Seeder
                     'heure_debut' => '14:00:00',
                     'heure_fin' => '15:30:00',
                     'motif' => 'Point d\'équipe',
-                'user_id_creation' => 1,
+                    'user_id_creation' => 1,
 
                 ]);
             }
@@ -112,7 +114,7 @@ class ReservationSeeder extends Seeder
                     'heure_debut' => '09:00:00',
                     'heure_fin' => '10:30:00',
                     'motif' => 'Stand-up quotidien',
-                'user_id_creation' => 1,
+                    'user_id_creation' => 1,
 
                 ]);
             }
@@ -126,7 +128,7 @@ class ReservationSeeder extends Seeder
                     'heure_debut' => '14:00:00',
                     'heure_fin' => '16:00:00',
                     'motif' => 'Revue de projet',
-                'user_id_creation' => 1,
+                    'user_id_creation' => 1,
 
                 ]);
             }
@@ -170,10 +172,10 @@ class ReservationSeeder extends Seeder
                     'user_id' => $salarie->id,
                     'salle_id' => $salles->random()->id,
                     'date' => $date->format('Y-m-d'),
-                    'heure_debut' =>  $startHour,
-                    'heure_fin' =>  $endHour,
+                    'heure_debut' => $startHour,
+                    'heure_fin' => $endHour,
                     'motif' => $this->getRandomMotif(),
-                'user_id_creation' => 1,
+                    'user_id_creation' => 1,
                 ]);
             }
         }
@@ -187,8 +189,8 @@ class ReservationSeeder extends Seeder
             'date' => $twoWeeksFromNow->format('Y-m-d'),
             'heure_debut' => '10:00:00',
             'heure_fin' => '12:00:00',
-                'user_id_creation' => 1,
-                'motif' => 'Présentation trimestrielle',
+            'user_id_creation' => 1,
+            'motif' => 'Présentation trimestrielle',
         ]);
 
         Reservation::create([
@@ -197,8 +199,8 @@ class ReservationSeeder extends Seeder
             'date' => $twoWeeksFromNow->addDays(2)->format('Y-m-d'),
             'heure_debut' => '14:00:00',
             'heure_fin' => '17:00:00',
-                'user_id_creation' => 1,
-                'motif' => 'Atelier innovation',
+            'user_id_creation' => 1,
+            'motif' => 'Atelier innovation',
         ]);
     }
 
@@ -213,7 +215,7 @@ class ReservationSeeder extends Seeder
         // Create different utilization patterns for each room
         foreach ($salles as $index => $salle) {
             // Determine how booked this room should be (based on index for variety)
-            $bookingLevel = match($index) {
+            $bookingLevel = match ($index) {
                 0 => 'high',    // First room - high utilization
                 1 => 'medium',  // Second room - medium utilization
                 2 => 'low',     // Third room - low utilization
@@ -223,7 +225,7 @@ class ReservationSeeder extends Seeder
             };
 
             // Different booking patterns
-            $daysToBook = match($bookingLevel) {
+            $daysToBook = match ($bookingLevel) {
                 'high' => range(0, 4),    // Book all weekdays
                 'medium' => [0, 2, 4],    // Book Mon, Wed, Fri
                 'low' => [1, 3],          // Book Tue, Thu
@@ -240,7 +242,7 @@ class ReservationSeeder extends Seeder
                 }
 
                 // Determine how many bookings per day
-                $bookingsPerDay = match($bookingLevel) {
+                $bookingsPerDay = match ($bookingLevel) {
                     'high' => rand(2, 3),
                     'medium' => rand(1, 2),
                     'low' => 1,
@@ -284,10 +286,10 @@ class ReservationSeeder extends Seeder
         sort($selectedStartTimes);  // Sort times chronologically
 
         foreach ($selectedStartTimes as $startTime) {
-            $startHour = (int)substr($startTime, 0, 2);
+            $startHour = (int) substr($startTime, 0, 2);
 
             // Duration depends on booking level
-            $duration = match($bookingLevel) {
+            $duration = match ($bookingLevel) {
                 'high' => rand(2, 3),
                 'medium' => rand(1, 2),
                 'low' => 1,
@@ -299,7 +301,7 @@ class ReservationSeeder extends Seeder
 
             $slots[] = [
                 'start' => $startTime,
-                'end' => $endTime
+                'end' => $endTime,
             ];
         }
 

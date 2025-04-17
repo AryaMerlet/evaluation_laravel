@@ -5,7 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-if (! function_exists('secureEncode64')) { // @codeCoverageIgnore
+if (!function_exists('secureEncode64')) { // @codeCoverageIgnore
     /**
      * Génère une clef encodée base 64 avec un sel associé à la clef de l'application
      *
@@ -19,7 +19,7 @@ if (! function_exists('secureEncode64')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_currency')) { // @codeCoverageIgnore
+if (!function_exists('format_currency')) { // @codeCoverageIgnore
     /**
      * Renvoie la valeur formatée avec les paramètres souhaités
      *
@@ -37,7 +37,7 @@ if (! function_exists('format_currency')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_number')) { // @codeCoverageIgnore
+if (!function_exists('format_number')) { // @codeCoverageIgnore
     /**
      * Renvoie la valeur formatée avec les paramètres souhaités
      *
@@ -60,7 +60,7 @@ if (! function_exists('format_number')) { // @codeCoverageIgnore
 /**
  * Format français étendu ddddd DD MMMM YYYY
  */
-if (! function_exists('format_date')) { // @codeCoverageIgnore
+if (!function_exists('format_date')) { // @codeCoverageIgnore
     /**
      * Renvoie la valeur formatée avec les paramètres souhaités
      *
@@ -85,7 +85,7 @@ if (! function_exists('format_date')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_hour')) { // @codeCoverageIgnore
+if (!function_exists('format_hour')) { // @codeCoverageIgnore
     /**
      * Renvoie la valeur formatée avec les paramètres souhaités
      *
@@ -107,7 +107,7 @@ if (! function_exists('format_hour')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_telephone')) { // @codeCoverageIgnore
+if (!function_exists('format_telephone')) { // @codeCoverageIgnore
     function format_telephone(?string $value = null)
     {
         if ($value === null) {
@@ -119,7 +119,7 @@ if (! function_exists('format_telephone')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_siret')) { // @codeCoverageIgnore
+if (!function_exists('format_siret')) { // @codeCoverageIgnore
     function format_siret(?string $value = null)
     {
         if ($value === null) {
@@ -131,7 +131,7 @@ if (! function_exists('format_siret')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('format_date_FrToEng')) { // @codeCoverageIgnore
+if (!function_exists('format_date_FrToEng')) { // @codeCoverageIgnore
     /**
      * Renvoie une date au format anglais à partir d'une date au format français
      *
@@ -149,7 +149,7 @@ if (! function_exists('format_date_FrToEng')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('nbDaysBetween')) { // @codeCoverageIgnore
+if (!function_exists('nbDaysBetween')) { // @codeCoverageIgnore
     /**
      * Revoie le nombre de jours entre 2 dates
      *
@@ -170,7 +170,7 @@ if (! function_exists('nbDaysBetween')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('nbDaysOffBetween')) { // @codeCoverageIgnore
+if (!function_exists('nbDaysOffBetween')) { // @codeCoverageIgnore
     /**
      * Revoie le nombre de jours entre 2 dates hors les weekends
      *
@@ -193,7 +193,7 @@ if (! function_exists('nbDaysOffBetween')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('sizeFileReadable')) { // @codeCoverageIgnore
+if (!function_exists('sizeFileReadable')) { // @codeCoverageIgnore
     /**
      * Renvoie le poids d'un fichier exprimés en bytes dans un format compréhensible pour un humain
      *
@@ -213,7 +213,7 @@ if (! function_exists('sizeFileReadable')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('sanitizeFloat')) { // @codeCoverageIgnore
+if (!function_exists('sanitizeFloat')) { // @codeCoverageIgnore
     /**
      * Renvoie une valeur numérique brute sans caractères de mises en forme
      *
@@ -233,7 +233,7 @@ if (! function_exists('sanitizeFloat')) { // @codeCoverageIgnore
         $commaPos = strrpos($input, ',');
         $sep = $dotPos > $commaPos && $dotPos ? $dotPos : ($commaPos > $dotPos && $commaPos ? $commaPos : false);
 
-        if (! $sep) {
+        if (!$sep) {
             return floatval(preg_replace('/[^0-9\-]/', '', $input));
         }
 
@@ -244,7 +244,7 @@ if (! function_exists('sanitizeFloat')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('supprimer_decoration')) { // @codeCoverageIgnore
+if (!function_exists('supprimer_decoration')) { // @codeCoverageIgnore
     /**
      * @param  string|null  $input  Entrant dont il faut supprimer les décorations
      *
@@ -262,7 +262,7 @@ if (! function_exists('supprimer_decoration')) { // @codeCoverageIgnore
         $commaPos = strrpos($input, ',');
         $sep = $dotPos > $commaPos && $dotPos ? $dotPos : ($commaPos > $dotPos && $commaPos ? $commaPos : false);
 
-        if (! $sep) {
+        if (!$sep) {
             return floatval(preg_replace('/[^0-9\-]/', '', $input));
         }
 
@@ -273,7 +273,7 @@ if (! function_exists('supprimer_decoration')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('bool_val')) { // @codeCoverageIgnore
+if (!function_exists('bool_val')) { // @codeCoverageIgnore
     /**
      * Renvoie un booléen en fonction du paramètre passé
      *
@@ -283,7 +283,7 @@ if (! function_exists('bool_val')) { // @codeCoverageIgnore
      */
     function bool_val(mixed $input): bool
     {
-        if (! is_string($input)) {
+        if (!is_string($input)) {
             return (bool) $input;
         }
         switch (strtolower($input)) {
@@ -299,7 +299,7 @@ if (! function_exists('bool_val')) { // @codeCoverageIgnore
     }
 }
 
-if (! function_exists('salaries')) { // @codeCoverageIgnore
+if (!function_exists('salaries')) { // @codeCoverageIgnore
     /**
      * @return Collection<string|int, User>
      *
@@ -316,7 +316,7 @@ if (! function_exists('salaries')) { // @codeCoverageIgnore
     }
 }
 
-if (! class_exists('BreadcrumbItem')) { // @codeCoverageIgnore
+if (!class_exists('BreadcrumbItem')) { // @codeCoverageIgnore
     class BreadcrumbItem
     {
         /**
@@ -326,13 +326,11 @@ if (! class_exists('BreadcrumbItem')) { // @codeCoverageIgnore
          *
          * @return void
          */
-        public function __construct(public string $libelle, public string $lien = '#', public bool $isActive = false)
-        {
-        }
+        public function __construct(public string $libelle, public string $lien = '#', public bool $isActive = false) {}
     }
 }
 
-if (! class_exists('DateUSGPH')) { // @codeCoverageIgnore
+if (!class_exists('DateUSGPH')) { // @codeCoverageIgnore
     class DateUSGPH
     {
         /**
@@ -348,7 +346,7 @@ if (! class_exists('DateUSGPH')) { // @codeCoverageIgnore
                 $currentDay = Carbon::now();
             } elseif ($currentDay instanceof \Carbon\Carbon) {
                 $currentDay = Carbon::parse($currentDay);
-            } elseif (! $currentDay instanceof Carbon) {
+            } elseif (!$currentDay instanceof Carbon) {
                 $currentDay = Carbon::parse($currentDay);
             }
             $currentYear = $currentDay->year;

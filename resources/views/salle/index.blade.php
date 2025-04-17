@@ -20,6 +20,7 @@
                               <th>Nom</th>
                               <th>Capacité</th>
                               <th>Surface</th>
+                              <th>Equipement</th>
                               @auth
                                   @can('salle-update')
                                       <th>Actions</th>
@@ -31,16 +32,19 @@
                           @forelse($salles as $salle)
                               <tr>
                                   <td>{{ $salle->name }}</td>
-                                  <td>{{ $salle->capacity }}</td>
-                                  <td>{{ $salle->surface }}</td>
+                                  <td>{{ $salle->capacity }} personnes</td>
+                                  <td>{{ $salle->surface }} m²</td>
+                                  <td>{{ $salle->equipments }}</td>
+
                                   @auth
-                                    <td class="d-flex">
-                                      @can('salle-update')
+                                    @can('salle-update')
+                                      <td class="d-flex">
+
                                         <!-- Edit Button -->
                                         <x-grid.button-action ability="salle-update"
                                             url="{{ route('salle.edit', $salle->id) }}" titre="Modifier"
                                             icone="fas fa-edit" couleur="warning" />
-                                      @endcan
+                                    @endcan
                                       <!-- Delete Button -->
                                       @can('salle-delete')
                                           <form method="POST" action="{{ route('salle.destroy', $salle->id) }}"
@@ -59,7 +63,7 @@
                               </tr>
                           @empty
                               <tr>
-                                  <td colspan="3" class="text-center">Aucune salle trouvé.</td>
+                                  <td colspan="5" class="text-center">Aucune salle trouvée.</td>
                               </tr>
                           @endforelse
                       </tbody>

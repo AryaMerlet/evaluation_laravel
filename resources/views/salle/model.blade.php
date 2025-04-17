@@ -22,13 +22,37 @@
                     method="{{ isset($salle) ? 'PUT' : 'POST' }}">
 
                     <x-inputs.input-text
-                        property="nom"
+                        property="name"
                         label="Nom du salle"
-                        placeholder="Entrez le nom du salle"
-                        :old="old('nom')"
-                        :entity="$salle ?? null"
+                        placeholder="Entrez le nom de la salle"
+                        :old="old('name')"
+                        :entity="$salle?? null"
                         required
                         autofocus />
+
+                    <x-inputs.input-text
+                    property="capacity"
+                    label="Capacité en personnes de la salle"
+                    placeholder="Entrez la capacité de la salle"
+                    :old="old('capacity')"
+                    :entity="$salle ?? null"
+                    required />
+
+                    <x-inputs.input-text
+                    property="surface"
+                    label="Superficie de la salle"
+                    placeholder="Entrez la superficie de la salle"
+                    :old="old('surface')"
+                    :entity="$salle ?? null"
+                    required  />
+
+                    <x-inputs.input-text
+                    property="equipments"
+                    label="Equipement de la salle"
+                    placeholder="Entrez les équipements de la salle"
+                    :old="old('equipments')"
+                    :entity="$salle ?? null"
+                    required />
 
                     <div class="form-group d-flex justify-content-between mb-0">
                         <a href="{{ route('salle.index') }}" class="btn btn-secondary">Retour</a>

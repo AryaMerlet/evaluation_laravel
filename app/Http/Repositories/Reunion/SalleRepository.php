@@ -4,8 +4,6 @@ namespace App\Http\Repositories\Reunion;
 
 use App\Models\Reunion\Salle;
 use Auth;
-use DB;
-use Log;
 
 class SalleRepository
 {
@@ -16,6 +14,7 @@ class SalleRepository
 
     /**
      * Constructor
+     *
      * @param  Salle  $salle
      */
     public function __construct(Salle $salle)
@@ -25,14 +24,17 @@ class SalleRepository
 
     /**
      * Save the model instance
+     *
      * @param  Salle  $salle
-     * @return  Salle
+     *
+     * @return Salle
      */
     private function save(Salle $salle, array $inputs): Salle
     {
         $salle->name = $inputs['name'];
         $salle->capacity = $inputs['capacity'];
         $salle->surface = $inputs['surface'];
+        $salle->equipments = $inputs['equipments'];
         $salle->save();
 
         return $salle;
@@ -40,8 +42,10 @@ class SalleRepository
 
     /**
      * Store a new model instance
+     *
      * @param  array<mixed>  $inputs
-     * @return  Salle
+     *
+     * @return Salle
      */
     public function store(array $inputs): Salle
     {
@@ -49,26 +53,32 @@ class SalleRepository
         $salle->user_id_creation = Auth::id();
 
         $this->save($salle, $inputs);
+
         return $salle;
     }
 
     /**
      * Update the model instance
+     *
      * @param  Salle  $salle
      * @param  array<mixed>  $inputs
-     * @return  Salle
+     *
+     * @return Salle
      */
     public function update(Salle $salle, array $inputs): Salle
     {
         $salle->user_id_modification = Auth::id();
 
         $this->save($salle, $inputs);
+
         return $salle;
     }
 
     /**
      * Delete the model instance
+     *
      * @param  Salle  $salle
+     *
      * @return bool|null
      */
     public function destroy(Salle $salle)
@@ -81,7 +91,9 @@ class SalleRepository
 
     /**
      * Undelete the model instance
+     *
      * @param  Salle  $salle
+     *
      * @return void
      */
     public function undelete(Salle $salle)
@@ -91,6 +103,7 @@ class SalleRepository
 
     /**
      * Return a JSON for index datatable
+     *
      * @return string|false|void — a JSON encoded string on success or FALSE on failure
      */
     public function json()

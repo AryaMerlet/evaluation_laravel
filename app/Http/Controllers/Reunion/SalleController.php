@@ -13,7 +13,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use InvalidArgumentException;
 use Session;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -25,12 +24,15 @@ class SalleController extends Controller
      * @var SalleService
      */
     private $service;
+
     private const ABILITY = 'salle';
+
     private const PATH_VIEWS = 'salle';
 
     /**
      * Constructor
-     * @param   SalleService $service
+     *
+     * @param  SalleService  $service
      */
     public function __construct(SalleService $service)
     {
@@ -48,12 +50,15 @@ class SalleController extends Controller
     public function index()
     {
         if ($this->can(self::ABILITY . '-retrieve')) {
-            return view(self::PATH_VIEWS . '.index');
+            $salles = Salle::paginate(10);
+
+            return view(self::PATH_VIEWS . '.index', compact('salles'));
         }
     }
 
     /**
      * @return View|Factory|null
+     *
      * @throws BindingResolutionException
      * @throws RouteNotFoundException
      * @throws InvalidFormatException
@@ -70,6 +75,7 @@ class SalleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  SalleModelRequest  $request
+     *
      * @return RedirectResponse|void
      */
     public function store(SalleModelRequest $request)
@@ -85,8 +91,10 @@ class SalleController extends Controller
     }
 
     /**
-     * @param Salle $salle
+     * @param  Salle  $salle
+     *
      * @return View|Factory|null
+     *
      * @throws BindingResolutionException
      * @throws RouteNotFoundException
      * @throws InvalidFormatException
@@ -100,8 +108,10 @@ class SalleController extends Controller
     }
 
     /**
-     * @param Salle $salle
+     * @param  Salle  $salle
+     *
      * @return View|Factory|null
+     *
      * @throws BindingResolutionException
      * @throws RouteNotFoundException
      * @throws InvalidFormatException
@@ -118,7 +128,8 @@ class SalleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  SalleModelRequest  $request
-     * @param  Salle $salle
+     * @param  Salle  $salle
+     *
      * @return RedirectResponse|void
      */
     public function update(SalleModelRequest $request, Salle $salle)
@@ -134,7 +145,8 @@ class SalleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Salle $salle
+     * @param  Salle  $salle
+     *
      * @return RedirectResponse|void
      */
     public function destroy(Salle $salle)
@@ -148,13 +160,33 @@ class SalleController extends Controller
     }
 
     /**
+     * Summary of corbeille
+     *
+     * @return View
+     */
+    public function corbeille()
+    {
+        if ($this->can(self::ABILITY . '-delete')) {
+            $deletedSalles = Salle::onlyTrashed()
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+
+            return view(self::PATH_VIEWS . '.corbeille', compact('deletedSalles'));
+        }
+
+        return abort(401);
+    }
+
+    /**
      * Restaure un �l�ment supprim�
      *
      * @example Penser � utiliser un bind dans le web.php
      *          Route::bind('salle_id', function ($salle_id) {
      *              return Salle::onlyTrashed()->find($salle_id);
      *          });
-     * @param  Salle $salle
+     *
+     * @param  Salle  $salle
+     *
      * @return RedirectResponse|void
      */
     public function undelete(Salle $salle)
@@ -169,6 +201,7 @@ class SalleController extends Controller
 
     /**
      * Renvoie la liste des Salle au format JSON pour leur gestion
+     *
      * @return string|false|void � a JSON encoded string on success or FALSE on failure
      */
     public function json()
@@ -181,8 +214,8 @@ class SalleController extends Controller
     /**
      * Rempli un tableau avec les données nécessaires aux vues
      *
-     * @param Salle $salle|null
-     * @param string $ability
+     * @param  Salle  $salle|null
+     * @param  string  $ability
      *
      * @return array<string, mixed>
      *
@@ -193,14 +226,16 @@ class SalleController extends Controller
         return [
             'salle' => $salle,
             // variables � ajouter
-            'disabled' => $ability === 'retrieve'
+            'disabled' => $ability === 'retrieve',
         ];
     }
 
     /**
-     * @param Salle $salle|null
-     * @param string $ability
+     * @param  Salle  $salle|null
+     * @param  string  $ability
+     *
      * @return View|Factory|null
+     *
      * @throws BindingResolutionException
      * @throws RouteNotFoundException
      * @throws InvalidFormatException

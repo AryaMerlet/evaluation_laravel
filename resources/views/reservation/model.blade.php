@@ -22,13 +22,14 @@
                     method="{{ isset($reservation) ? 'PUT' : 'POST' }}">
 
                     <x-inputs.input-select2
-                        property="salle"
-                        label="salle"
-                        placeholder="Sélectionner le nom de la salle"
-                        :old="old('reservations->salle->nom')"
-                        :entity="$reservation ?? null"
-                        :values="$reservations"
-                        required />
+                    property="salle_id"
+                    label="Salle"
+                    :values="$salles"
+                    itemValue="id"
+                    itemLabel="name"
+                    :entity="$reservation ?? null"
+                    :selected="old('salle_id', $reservation->salle_id ?? null)"
+                    required />
 
                     <div class="form-group mb-3">
                       <label for="date">Date prévue</label>
@@ -42,78 +43,31 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="heure_debut">Heure de début</label>
-                        <div class="d-flex">
-                            <select id="heure_debut_heure" name="heure_debut_heure"
-                                class="form-control @error('heure_debut_heure') is-invalid @enderror" required>
-                                @for ($i = 0; $i < 24; $i++)
-                                    <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}"
-                                        {{ old('heure_debut_heure', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('H') : (request('heure_debut') ? \Carbon\Carbon::parse(request('heure_debut'))->format('H') : '')) == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
-                                        {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}
-                                    </option>
-                                @endfor
-                            </select>
-                            <span class="mx-2">:</span>
-                            <select id="heure_debut_minute" name="heure_debut_minute"
-                                class="form-control @error('heure_debut_minute') is-invalid @enderror" required>
-                                <option value="0"
-                                    {{ old('heure_debut_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('i') : (request('heure_debut') ? \Carbon\Carbon::parse(request('heure_debut'))->format('i') : '')) == '00' ? 'selected' : '' }}>
-                                    00</option>
-                                <option value="15"
-                                    {{ old('heure_debut_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('i') : (request('heure_debut') ? \Carbon\Carbon::parse(request('heure_debut'))->format('i') : '')) == '15' ? 'selected' : '' }}>
-                                    15</option>
-                                <option value="30"
-                                    {{ old('heure_debut_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('i') : (request('heure_debut') ? \Carbon\Carbon::parse(request('heure_debut'))->format('i') : '')) == '30' ? 'selected' : '' }}>
-                                    30</option>
-                                <option value="45"
-                                    {{ old('heure_debut_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('i') : (request('heure_debut') ? \Carbon\Carbon::parse(request('heure_debut'))->format('i') : '')) == '45' ? 'selected' : '' }}>
-                                    45</option>
-                            </select>
-                        </div>
-                        @error('heure_debut_heure')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        @error('heure_debut_minute')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                      <label for="heure_debut">Heure de début</label>
+                      <div class="d-flex">
+                        <input type="time" id="heure_debut" name="heure_debut"
+                        class="form-control @error('heure_debut') is-invalid @enderror"
+                        value="{{ old('heure_debut', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_debut)->format('H:i') : (request('heure_debut') ? request('heure_debut') : '')) }}"
+                        required lang="fr">
+                      </div>
+                      @error('heure_debut')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="heure_fin">Heure de fin</label>
-                        <div class="d-flex">
-                            <select id="heure_fin_heure" name="heure_fin_heure"
-                                class="form-control @error('heure_fin_heure') is-invalid @enderror" required>
-                                @for ($i = 0; $i < 24; $i++)
-                                    <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}"
-                                        {{ old('heure_fin_heure', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('H') : (request()->heure_fin ? substr(request()->heure_fin, 0, 2) : '')) == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
-                                        {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}
-                                    </option>
-                                @endfor
-                            </select>
-                            <span class="mx-2">:</span>
-                            <select id="heure_fin_minute" name="heure_fin_minute"
-                                class="form-control @error('heure_fin_minute') is-invalid @enderror" required>
-                                <option value="0"
-                                    {{ old('heure_fin_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('i') : (request()->heure_fin ? substr(request()->heure_fin, 3, 2) : '00')) == '00' ? 'selected' : '' }}>
-                                    00</option>
-                                <option value="15"
-                                    {{ old('heure_fin_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('i') : (request()->heure_fin ? substr(request()->heure_fin, 3, 2) : '00')) == '15' ? 'selected' : '' }}>
-                                    15</option>
-                                <option value="30"
-                                    {{ old('heure_fin_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('i') : (request()->heure_fin ? substr(request()->heure_fin, 3, 2) : '00')) == '30' ? 'selected' : '' }}>
-                                    30</option>
-                                <option value="45"
-                                    {{ old('heure_fin_minute', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('i') : (request()->heure_fin ? substr(request()->heure_fin, 3, 2) : '00')) == '45' ? 'selected' : '' }}>
-                                    45</option>
-                            </select>
-                        </div>
-                        @error('heure_fin_heure')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        @error('heure_fin_minute')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                      <label for="heure_fin">Heure de fin</label>
+                      <div class="d-flex">
+                        <input type="time" id="heure_fin" name="heure_fin"
+                        class="form-control @error('heure_fin') is-invalid @enderror"
+                        value="{{ old('heure_fin', isset($reservation) ? \Carbon\Carbon::parse($reservation->heure_fin)->format('H:i') : (request('heure_fin') ? request('heure_fin') : '')) }}"
+                        required lang="fr">
+                      </div>
+                      @error('heure_fin')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </div>
+
 
                     <x-inputs.input-text
                         property="motif"
@@ -131,4 +85,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const timeInputs = document.querySelectorAll('input[type="time"]');
+        timeInputs.forEach(input => {
+
+          input.setAttribute('lang', 'fr');
+
+          if (typeof input.timeFormat !== 'undefined') {
+            input.timeFormat = 'HH:mm';
+          }
+        });
+      });
+    </script>
   </x-app-layout>
+

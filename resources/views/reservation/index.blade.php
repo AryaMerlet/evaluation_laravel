@@ -61,7 +61,7 @@
                               </tr>
                           @empty
                               <tr>
-                                  <td colspan="3" class="text-center">Aucune réservation trouvé.</td>
+                                  <td colspan="5" class="text-center">Aucune réservation trouvée.</td>
                               </tr>
                           @endforelse
                       </tbody>

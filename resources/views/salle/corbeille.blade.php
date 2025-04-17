@@ -20,6 +20,9 @@
                   <thead>
                       <tr>
                           <th>Nom</th>
+                          <th>Capacité</th>
+                          <th>Surface</th>
+                          <th>Equipement</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -27,6 +30,9 @@
                       @forelse($deletedSalles as $salle)
                           <tr>
                               <td>{{ $salle->nom }}</td>
+                              <td>{{ $salle->capacity }} personnes</td>
+                              <td>{{ $salle->surface }} m²</td>
+                              <td>{{ $salle->equipments }}</td>
                               <td>
                                   <button type="button" class="btn btn-outline-info btn-inline"
                                       data-bs-toggle="tooltip" title="Restaurer"
@@ -37,7 +43,7 @@
                           </tr>
                       @empty
                           <tr>
-                              <td colspan="3" class="text-center">Aucun salle trouvé dans la corbeille.</td>
+                              <td colspan="5" class="text-center">Aucun salle trouvée dans la corbeille.</td>
                           </tr>
                       @endforelse
                   </tbody>
