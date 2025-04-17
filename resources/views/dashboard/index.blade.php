@@ -135,7 +135,7 @@
                               <div class="tab-content pt-4" id="reservationTabContent">
                                   <!-- Future Reservations Tab -->
                                   <div class="tab-pane fade show active" id="future-reservations" role="tabpanel">
-                                      @if(count($futureReservations) > 0)
+                                    @if(!empty($futureReservations) && count($futureReservations) > 0)
                                           <div class="table-responsive">
                                               <table class="table table-hover">
                                                   <thead>
@@ -190,7 +190,7 @@
 
                                   <!-- Past Reservations Tab -->
                                   <div class="tab-pane fade" id="past-reservations" role="tabpanel">
-                                      @if(count($pastReservations) > 0)
+                                    @if($pastReservations?->isNotEmpty())
                                           <div class="table-responsive">
                                               <table class="table table-hover">
                                                   <thead>

@@ -62,8 +62,6 @@ class DashboardController extends Controller
 
             $pourcentageUtilisation = $heuresReservees / $totalHoursAvailablePerSalle * 100;
 
-
-
             $salleUtilization->push((object) [
                 'id' => $salle->id,
                 'nom' => $salle->name,
@@ -78,16 +76,17 @@ class DashboardController extends Controller
 
         $mostBookedSalle = $salleUtilization->first();
         $leastBookedSalle = $salleUtilization->last();
-
         $averageUtilization = $salleUtilization->avg('pourcentageUtilisation');
 
-        return view('dashboard.index', compact(
-            'salleUtilization',
-            'totalReservations',
-            'averageUtilization',
-            'mostBookedSalle',
-            'leastBookedSalle'
-        ));
+        return view('dashboard.index', [
+            'salleUtilization' => $salleUtilization,
+            'totalReservations' => $totalReservations,
+            'averageUtilization' => $averageUtilization,
+            'mostBookedSalle' => $mostBookedSalle,
+            'leastBookedSalle' => $leastBookedSalle,
+            'futureReservations' => collect(), // Pour éviter les erreurs
+            'pastReservations' => collect(),   // Pour éviter les erreurs
+        ]);
     }
 
     /**
@@ -99,7 +98,6 @@ class DashboardController extends Controller
         $userId = Auth::id();
         $today = Carbon::today();
 
-        // Get future and past reservations for the current user
         $futureReservations = Reservation::where('user_id', $userId)
             ->where(function ($query) use ($today) {
                 $query->where('date', '>', $today)
@@ -126,6 +124,14 @@ class DashboardController extends Controller
             ->orderByDesc('heure_debut')
             ->get();
 
-        return view('dashboard.index', compact('futureReservations', 'pastReservations'));
+        return view('dashboard.index', [
+            'futureReservations' => $futureReservations,
+            'pastReservations' => $pastReservations,
+            'salleUtilization' => collect(),         // Pour compatibilité vue
+            'totalReservations' => 0,
+            'averageUtilization' => 0,
+            'mostBookedSalle' => null,
+            'leastBookedSalle' => null,
+        ]);
     }
 }
