@@ -10,7 +10,7 @@
   {{-- <meta name="author" content="Wiklog"> --}}
   <meta name="keyword" content="Gestion du planning des équipes">
 
-  {{-- <title>{{ $title }}</title> --}}
+  <title>{{ $title }}</title>
 
   {{-- favicon --}}
   <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicon/apple-icon-57x57.png') }}">

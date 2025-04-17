@@ -25,10 +25,10 @@ class WelcomeController extends Controller
          */
         $user = Auth::user();
 
-        if ($user->isA('salarie')) {
-            return redirect()->route('planning.index');
+        if ($user->isA('salarie') || $user->isA('admin')) {
+            return redirect()->route('dashboard');
+        }else{
+            return redirect()->route('login');
         }
-
-        return redirect()->route('synthese.index');
     }
 }
