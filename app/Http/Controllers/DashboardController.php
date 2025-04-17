@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Reunion\Reservation;
 use App\Models\Reunion\Salle;
-use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -22,38 +21,38 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role == 'admin') {
+        $user = Auth::user();
+
+        if ($user->isan('admin')) {
             return $this->adminDashboard();
-        } else {
-            return $this->salarieDashboard();
         }
+
+        return $this->salarieDashboard();
     }
 
+    /**
+     * Summary of adminDashboard
+     * @return \Illuminate\Contracts\View\View
+     */
     private function adminDashboard()
     {
-        // Define the current week period
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
-        // Get all salles
         $salles = Salle::all();
 
-        // Calculate working hours per day (assuming 9AM-6PM = 9 hours)
         $workingHoursPerDay = 9;
-        $workingDaysThisWeek = 5; // Mon-Fri
+        $workingDaysThisWeek = 5;
         $totalHoursAvailablePerSalle = $workingHoursPerDay * $workingDaysThisWeek;
 
-        // Get all reservations for this week
         $weekReservations = Reservation::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
         $totalReservations = $weekReservations->count();
 
-        // Calculate utilization per salle
         $salleUtilization = collect();
 
         foreach ($salles as $salle) {
             $salleReservations = $weekReservations->where('salle_id', $salle->id);
 
-            // Calculate hours booked for this salle
             $heuresReservees = 0;
             foreach ($salleReservations as $reservation) {
                 $debut = Carbon::parse($reservation->heure_debut);
@@ -61,29 +60,25 @@ class DashboardController extends Controller
                 $heuresReservees += $fin->diffInHours($debut);
             }
 
-            // Calculate utilization percentage
-            $pourcentageUtilisation = $totalHoursAvailablePerSalle > 0
-                ? ($heuresReservees / $totalHoursAvailablePerSalle) * 100
-                : 0;
+            $pourcentageUtilisation = $heuresReservees / $totalHoursAvailablePerSalle * 100;
+
+
 
             $salleUtilization->push((object) [
                 'id' => $salle->id,
-                'nom' => $salle->nom,
-                'capacite' => $salle->capacite,
+                'nom' => $salle->name,
+                'capacite' => $salle->capacity,
                 'heuresDisponibles' => $totalHoursAvailablePerSalle,
                 'heuresReservees' => $heuresReservees,
                 'pourcentageUtilisation' => $pourcentageUtilisation,
             ]);
         }
 
-        // Sort by utilization percentage (descending)
         $salleUtilization = $salleUtilization->sortByDesc('pourcentageUtilisation');
 
-        // Get most and least booked salles
         $mostBookedSalle = $salleUtilization->first();
         $leastBookedSalle = $salleUtilization->last();
 
-        // Calculate average utilization
         $averageUtilization = $salleUtilization->avg('pourcentageUtilisation');
 
         return view('dashboard.index', compact(
@@ -95,6 +90,10 @@ class DashboardController extends Controller
         ));
     }
 
+    /**
+     * Summary of salarieDashboard
+     * @return \Illuminate\Contracts\View\View
+     */
     private function salarieDashboard()
     {
         $userId = Auth::id();

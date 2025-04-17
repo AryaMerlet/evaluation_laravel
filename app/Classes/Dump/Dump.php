@@ -49,7 +49,7 @@ class Dump
         // $db_name = env('DB_DATABASE');
 
         $limit = 'P' . $this->nb_days_to_keep . 'D';
-        $date = new DateTime;
+        $date = new DateTime();
         $file = $date->format('Y-m-d-H-i-s');
         $start_date = $date->sub(new DateInterval($limit));
 
@@ -75,7 +75,7 @@ class Dump
         exec("mysqldump --user={$user} --password={$password} --host={$host} {$db_name} > {$path}{$file}.sql");
 
         if ($this->is_zipped) {
-            $zip = new ZipArchive;
+            $zip = new ZipArchive();
             if ($zip->open($path . $file . '.zip', ZipArchive::CREATE) !== true) {
                 exit(1);
             }

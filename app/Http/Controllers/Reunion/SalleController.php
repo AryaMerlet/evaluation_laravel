@@ -20,14 +20,14 @@ use Symfony\Component\Translation\Exception\InvalidArgumentException as Exceptio
 
 class SalleController extends Controller
 {
+    private const ABILITY = 'salle';
+
+    private const PATH_VIEWS = 'salle';
+
     /**
      * @var SalleService
      */
     private $service;
-
-    private const ABILITY = 'salle';
-
-    private const PATH_VIEWS = 'salle';
 
     /**
      * Constructor
@@ -219,7 +219,6 @@ class SalleController extends Controller
      *
      * @return array<string, mixed>
      *
-     * @throws InvalidArgumentException
      */
     private function data(?Salle $salle, string $ability): array
     {

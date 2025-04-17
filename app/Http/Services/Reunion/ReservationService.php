@@ -77,7 +77,7 @@ class ReservationService
                 });
             });
 
-        if (isset($reservation) && isset($reservation->id)) {
+        if (isset($reservation->id)) {
             $query->where('id', '!=', $reservation->id);
         }
 

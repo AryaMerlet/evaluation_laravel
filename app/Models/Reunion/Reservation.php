@@ -4,9 +4,11 @@ namespace App\Models\Reunion;
 
 use App\Models\User;
 use App\Traits\LogAction;
+use App\Traits\WhoActs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -53,12 +55,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Reservation extends Model
 {
     /**
-     * @use HasFactory<ReservationFactory>
+     * @use HasFactory<\Database\Factories\Reunion\ReservationFactory>
      */
     use HasFactory;
 
     use LogAction;
     use SoftDeletes;
+    use WhoActs;
 
     /**
      * @var list<string>
@@ -81,13 +84,26 @@ class Reservation extends Model
         return '';
     }
 
+    /**
+     * Summary of salle
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Salle, $this>
+     */
     public function salle()
     {
         return $this->belongsTo(Salle::class);
     }
 
+    /**
+     * Summary of user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Summary of userCreation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     */
 }

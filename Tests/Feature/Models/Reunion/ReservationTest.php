@@ -9,8 +9,8 @@ use Tests\TestCase;
 
 class ReservationTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @var string
@@ -36,7 +36,7 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.show', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.show', ['reservation' => $reservation->id]));
 
         $response->assertRedirect('login');
     }
@@ -46,14 +46,14 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['reservation' => $reservation->id]));
 
         $response->assertRedirect('login');
     }
 
     public function test_index_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.index'));
 
@@ -62,7 +62,7 @@ class ReservationTest extends TestCase
 
     public function test_create_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.create'));
 
@@ -71,7 +71,7 @@ class ReservationTest extends TestCase
 
     public function test_store_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->make();
         $data = array_merge($reservation->toArray());
@@ -82,64 +82,64 @@ class ReservationTest extends TestCase
 
     public function test_show_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.show', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.show', ['reservation' => $reservation->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_edit_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['reservation' => $reservation->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_update_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->create();
         $data = array_merge($reservation->toArray());
         $data['id'] = $reservation->id;
 
-        $response = $this->put(route(self::MODEL . '.update', ['modelVariable' => $reservation->id]), $data);
+        $response = $this->put(route(self::MODEL . '.update', ['reservation' => $reservation->id]), $data);
 
         $response->assertUnauthorized();
     }
 
     public function test_delete_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $reservation->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['reservation' => $reservation->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_undelete_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.undelete', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.undelete', ['reservation_id' => $reservation->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_json_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.json'));
 
@@ -184,7 +184,7 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['reservation' => $reservation->id]));
 
         $response->assertStatus(200);
     }
@@ -197,8 +197,8 @@ class ReservationTest extends TestCase
             ->create();
         $data = array_merge($reservation->toArray());
 
-        $response = $this->put(route(self::MODEL . '.update', ['modelVariable' => $reservation->id]), $data);
-        $modelVariable = Reservation::find($reservation->id);
+        $response = $this->put(route(self::MODEL . '.update', ['reservation' => $reservation->id]), $data);
+        $reservation = Reservation::find($reservation->id);
 
         $this->assertNotNull($reservation->user_id_modification);
         $response->assertSessionHas('ok');
@@ -211,7 +211,7 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $reservation->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['reservation' => $reservation->id]));
 
         $this->assertSoftDeleted(Reservation::class);
         $response->assertSessionHas(['ok']);
@@ -224,11 +224,11 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $reservation->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['reservation' => $reservation->id]));
         $this->assertSoftDeleted(Reservation::class);
         $response->assertSessionHas(['ok']);
 
-        $response = $this->get(route(self::MODEL . '.undelete', ['modelVariable' => $reservation->id]));
+        $response = $this->get(route(self::MODEL . '.undelete', ['reservation_id' => $reservation->id]));
 
         $this->assertNull($reservation->user_id_suppression);
         $response->assertSessionHas(['ok']);

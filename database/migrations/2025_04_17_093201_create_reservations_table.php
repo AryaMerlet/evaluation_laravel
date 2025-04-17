@@ -26,8 +26,8 @@ return new class extends Migration
             $table->time('heure_debut');
             $table->time('heure_fin');
             $table->string('motif')->nullable();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Salle::class);
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Salle::class)->constrained()->cascadeOnDelete();
             $table->whoAndWhen();
         });
 

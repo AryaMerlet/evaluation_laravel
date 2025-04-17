@@ -9,8 +9,8 @@ use Tests\TestCase;
 
 class SalleTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @var string
@@ -36,7 +36,7 @@ class SalleTest extends TestCase
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.show', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.show', ['salle' => $salle->id]));
 
         $response->assertRedirect('login');
     }
@@ -46,14 +46,14 @@ class SalleTest extends TestCase
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['salle' => $salle->id]));
 
         $response->assertRedirect('login');
     }
 
     public function test_index_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.index'));
 
@@ -62,7 +62,7 @@ class SalleTest extends TestCase
 
     public function test_create_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.create'));
 
@@ -71,7 +71,7 @@ class SalleTest extends TestCase
 
     public function test_store_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->make();
         $data = array_merge($salle->toArray());
@@ -82,64 +82,64 @@ class SalleTest extends TestCase
 
     public function test_show_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.show', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.show', ['salle' => $salle->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_edit_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['salle' => $salle->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_update_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->create();
         $data = array_merge($salle->toArray());
         $data['id'] = $salle->id;
 
-        $response = $this->put(route(self::MODEL . '.update', ['modelVariable' => $salle->id]), $data);
+        $response = $this->put(route(self::MODEL . '.update', ['salle' => $salle->id]), $data);
 
         $response->assertUnauthorized();
     }
 
     public function test_delete_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $salle->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['salle' => $salle->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_undelete_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.undelete', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.undelete', ['salle_id  ' => $salle->id]));
 
         $response->assertUnauthorized();
     }
 
     public function test_json_need_admin()
     {
-        $this->setUser();
+        $this->setUser('salarie');
 
         $response = $this->get(route(self::MODEL . '.json'));
 
@@ -184,7 +184,7 @@ class SalleTest extends TestCase
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->get(route(self::MODEL . '.edit', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.edit', ['salle' => $salle->id]));
 
         $response->assertStatus(200);
     }
@@ -197,8 +197,8 @@ class SalleTest extends TestCase
             ->create();
         $data = array_merge($salle->toArray());
 
-        $response = $this->put(route(self::MODEL . '.update', ['modelVariable' => $salle->id]), $data);
-        $modelVariable = Salle::find($salle->id);
+        $response = $this->put(route(self::MODEL . '.update', ['salle' => $salle->id]), $data);
+        $salle = Salle::find($salle->id);
 
         $this->assertNotNull($salle->user_id_modification);
         $response->assertSessionHas('ok');
@@ -211,7 +211,7 @@ class SalleTest extends TestCase
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $salle->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['salle' => $salle->id]));
 
         $this->assertSoftDeleted(Salle::class);
         $response->assertSessionHas(['ok']);
@@ -224,11 +224,11 @@ class SalleTest extends TestCase
         $salle = Salle::factory()
             ->create();
 
-        $response = $this->delete(route(self::MODEL . '.destroy', ['modelVariable' => $salle->id]));
+        $response = $this->delete(route(self::MODEL . '.destroy', ['salle' => $salle->id]));
         $this->assertSoftDeleted(Salle::class);
         $response->assertSessionHas(['ok']);
 
-        $response = $this->get(route(self::MODEL . '.undelete', ['modelVariable' => $salle->id]));
+        $response = $this->get(route(self::MODEL . '.undelete', ['salle_id' => $salle->id]));
 
         $this->assertNull($salle->user_id_suppression);
         $response->assertSessionHas(['ok']);

@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Repositories\Reunion;
 
 use App\Models\Reunion\Salle;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class SalleRepository
 {
@@ -23,37 +22,17 @@ class SalleRepository
     }
 
     /**
-     * Save the model instance
-     *
-     * @param  Salle  $salle
-     *
-     * @return Salle
-     */
-    private function save(Salle $salle, array $inputs): Salle
-    {
-        $salle->name = $inputs['name'];
-        $salle->capacity = $inputs['capacity'];
-        $salle->surface = $inputs['surface'];
-        $salle->equipments = $inputs['equipments'];
-        $salle->save();
-
-        return $salle;
-    }
-
-    /**
-     * Store a new model instance
-     *
-     * @param  array<mixed>  $inputs
-     *
+     * Summary of store
+     * @param array<string, mixed> $inputs
      * @return Salle
      */
     public function store(array $inputs): Salle
     {
-        $salle = new $this->salle;
-        $salle->user_id_creation = Auth::id();
-
+        $salle = new $this->salle();
+        /** @var int|null $userId */
+        $userId = Auth::id();
+        $salle->user_id_creation = $userId ?? 0; // Utilisation de 0 comme valeur par défaut si null
         $this->save($salle, $inputs);
-
         return $salle;
     }
 
@@ -61,16 +40,16 @@ class SalleRepository
      * Update the model instance
      *
      * @param  Salle  $salle
-     * @param  array<mixed>  $inputs
+     * @param  array<string, mixed>  $inputs
      *
      * @return Salle
      */
     public function update(Salle $salle, array $inputs): Salle
     {
-        $salle->user_id_modification = Auth::id();
-
+        /** @var int|null $userId */
+        $userId = Auth::id();
+        $salle->user_id_modification = $userId;
         $this->save($salle, $inputs);
-
         return $salle;
     }
 
@@ -83,9 +62,10 @@ class SalleRepository
      */
     public function destroy(Salle $salle)
     {
-        $salle->user_id_suppression = Auth::id();
+        /** @var int|null $userId */
+        $userId = Auth::id();
+        $salle->user_id_suppression = $userId;
         $salle->save();
-
         return $salle->delete();
     }
 
@@ -104,12 +84,30 @@ class SalleRepository
     /**
      * Return a JSON for index datatable
      *
-     * @return string|false|void — a JSON encoded string on success or FALSE on failure
+     * @return string|false — a JSON encoded string on success or FALSE on failure
      */
     public function json()
     {
         return json_encode(
             Salle::all()
         );
+    }
+
+    /**
+     * Save the model instance
+     *
+     * @param  Salle  $salle
+     * @param  array<string, mixed>  $inputs
+     *
+     * @return Salle
+     */
+    private function save(Salle $salle, array $inputs): Salle
+    {
+        $salle->name = $inputs['name'];
+        $salle->capacity = $inputs['capacity'];
+        $salle->surface = $inputs['surface'];
+        $salle->equipments = $inputs['equipments'];
+        $salle->save();
+        return $salle;
     }
 }

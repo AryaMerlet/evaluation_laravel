@@ -9,7 +9,7 @@
     <title>{{ $title ?? 'Room Booking System' }}</title>
 
     {{-- favicon --}}
-    <link rel="icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon">
+    {{-- <link rel="icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon"> --}}
 
     {{-- Scripts --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])

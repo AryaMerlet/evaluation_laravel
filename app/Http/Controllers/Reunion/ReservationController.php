@@ -7,29 +7,30 @@ use App\Http\Requests\Reunion\ReservationModelRequest;
 use App\Http\Services\Reunion\ReservationService;
 use App\Models\Reunion\Reservation;
 use App\Models\Reunion\Salle;
+use App\Notifications\ReservationNotification;
 use Carbon\Exceptions\InvalidFormatException;
 use Carbon\Exceptions\NotLocaleAwareException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use InvalidArgumentException;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Translation\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
 
 class ReservationController extends Controller
 {
+    private const ABILITY = 'reservation';
+
+    private const PATH_VIEWS = 'reservation';
+
     /**
      * @var ReservationService
      */
     private $service;
-
-    private const ABILITY = 'reservation';
-
-    private const PATH_VIEWS = 'reservation';
 
     /**
      * Constructor
@@ -57,13 +58,13 @@ class ReservationController extends Controller
         $user = Auth::user();
 
         if ($this->can(self::ABILITY . '-retrieve')) {
-            if ($user->role == 'admin') {
+            if ($user->isan('admin')) {
                 $reservations = Reservation::with('user', 'salle')
                     ->orderBy('date', 'DESC')
                     ->orderBy('heure_debut', 'DESC')
                     ->paginate(10);
             } else {
-                $reservations = Reservation::where('user_id', $user->id)
+                $reservations = Reservation::where('user_id', $user->id )
                     ->with('user', 'salle')
                     ->orderBy('date', 'DESC')
                     ->orderBy('heure_debut', 'DESC')
@@ -72,6 +73,8 @@ class ReservationController extends Controller
 
             return view(self::PATH_VIEWS . '.index', compact('reservations'));
         }
+
+        return redirect()->route('home');
     }
 
     /**
@@ -82,7 +85,6 @@ class ReservationController extends Controller
      * @throws InvalidFormatException
      * @throws NotLocaleAwareException
      * @throws ExceptionInvalidArgumentException
-     * @throws InvalidArgumentException
      */
     public function create()
     {
@@ -101,13 +103,17 @@ class ReservationController extends Controller
     public function store(ReservationModelRequest $request)
     {
         if ($this->can(self::ABILITY . '-create')) {
+            $user = Auth::user();
             $data = $request->all();
 
             $reservation = $this->service->store($data);
             Session::put('ok', 'Création effectuée');
+            $user->notify(new ReservationNotification($reservation, 'created'));
 
             return redirect(self::PATH_VIEWS);
         }
+
+        return redirect()->route('home');
     }
 
     /**
@@ -120,7 +126,6 @@ class ReservationController extends Controller
      * @throws InvalidFormatException
      * @throws NotLocaleAwareException
      * @throws ExceptionInvalidArgumentException
-     * @throws InvalidArgumentException
      */
     public function show(Reservation $reservation)
     {
@@ -139,7 +144,6 @@ class ReservationController extends Controller
      * @throws InvalidFormatException
      * @throws NotLocaleAwareException
      * @throws ExceptionInvalidArgumentException
-     * @throws InvalidArgumentException
      */
     public function edit(Reservation $reservation)
     {
@@ -164,6 +168,8 @@ class ReservationController extends Controller
 
             return redirect(route(self::PATH_VIEWS . '.index'));
         }
+
+        return redirect()->route('home');
     }
 
     /**
@@ -176,17 +182,21 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         if ($this->can(self::ABILITY . '-delete')) {
+            $user = Auth::user();
             $this->service->destroy($reservation);
             Session::put('ok', 'Suppression effectuée');
+            $user->notify(new ReservationNotification($reservation, 'created'));
 
             return redirect(route(self::PATH_VIEWS . '.index'));
         }
+
+        return redirect()->route('home');
     }
 
     /**
-     * Restaure un �l�ment supprim�
+     * Restaure un élément supprimé
      *
-     * @example Penser � utiliser un bind dans le web.php
+     * @example Penser à utiliser un bind dans le web.php
      *          Route::bind('reservation_id', function ($reservation_id) {
      *              return Reservation::onlyTrashed()->find($reservation_id);
      *          });
@@ -203,30 +213,32 @@ class ReservationController extends Controller
 
             return redirect(route(self::PATH_VIEWS . '.index'));
         }
+
+        return redirect()->route('home');
     }
 
     /**
      * Renvoie la liste des Reservation au format JSON pour leur gestion
      *
-     * @return string|false|void � a JSON encoded string on success or FALSE on failure
+     * @return string|false|void — a JSON encoded string on success or FALSE on failure
      */
     public function json()
     {
         if ($this->can(self::ABILITY . '-retrieve')) {
             return $this->service->json();
         }
+
+        return null;
     }
 
     /**
      * Rempli un tableau avec les données nécessaires aux vues
      *
-     * @param  Reservation  $reservation|null
+     * @param  Reservation|null  $reservation
      * @param  string  $ability
-     * @param  \Illuminate\Database\Eloquent\Collection|array  $salles
+     * @param  Collection<int, Salle>|array<string, mixed>  $salles
      *
      * @return array<string, mixed>
-     *
-     * @throws InvalidArgumentException
      */
     private function data(?Reservation $reservation, string $ability, $salles): array
     {
@@ -238,9 +250,9 @@ class ReservationController extends Controller
     }
 
     /**
-     * @param  Reservation  $reservation|null
+     * @param  Reservation|null  $reservation
      * @param  string  $ability
-     * @param  \Illuminate\Database\Eloquent\Collection|array  $salles
+     * @param  Collection<int, Salle>|array<string, mixed>  $salles
      *
      * @return View|Factory|null
      *
@@ -249,7 +261,6 @@ class ReservationController extends Controller
      * @throws InvalidFormatException
      * @throws NotLocaleAwareException
      * @throws ExceptionInvalidArgumentException
-     * @throws InvalidArgumentException
      */
     private function model(?Reservation $reservation, string $ability, $salles)
     {

@@ -14,6 +14,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
+ * @property string $role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token

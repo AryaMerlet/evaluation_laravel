@@ -2,10 +2,12 @@
 
 namespace App\Models\Reunion;
 
+use App\Traits\WhoActs;
 use App\Traits\LogAction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -50,12 +52,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Salle extends Model
 {
     /**
-     * @use HasFactory<SalleFactory>
+     * @use HasFactory<\Database\Factories\Reunion\SalleFactory>
      */
     use HasFactory;
 
     use LogAction;
     use SoftDeletes;
+    use WhoActs;
 
     /**
      * @var list<string>
@@ -76,7 +79,10 @@ class Salle extends Model
     {
         return '';
     }
-
+    /**
+     * Summary of reservations
+     * @return HasMany<Reservation, $this>
+     */
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
