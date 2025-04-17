@@ -1,6 +1,8 @@
 <?php
 
 use App\Classes\Commun\ExtendBlueprint;
+use App\Models\Reunion\Salle;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,13 +23,15 @@ return new class extends Migration
 
         $schema->create('reservations', function (ExtendBlueprint $table) {
             $table->id();
-
-            $table->date('date_debut');
-            $table->date('date_fin');
-
-
+            $table->date('date');
+            $table->time('heure_debut');
+            $table->time('heure_fin');
+            $table->string('motif')->nullable();
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Salle::class);
             $table->whoAndWhen();
         });
+
         Bouncer::allow('salarie')->to('reservation-create');
         Bouncer::allow('salarie')->to('reservation-update');
         Bouncer::allow('salarie')->to('reservation-delete');

@@ -16,28 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::firstOrCreate([
-            'first_name' => 'test',
-            'last_name' => 'user',
-            'email' => 'test.user@usgph.com',
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
-        Bouncer::assign('salarie')->to($user);
-
-        $admin = User::firstOrCreate([
-            'first_name' => 'test',
-            'last_name' => 'admin',
-            'email' => 'testadmin@usgph.com',
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
-        Bouncer::assign('admin')->to($admin);
-
-        // call seeders here
         $this->call([
-            ReservationSeeder::class,
+            UserSeeder::class,
             SalleSeeder::class,
+            ReservationSeeder::class,
         ]);
     }
 }

@@ -28,7 +28,7 @@
                           </tr>
                       </thead>
                       <tbody>
-                          @forelse($Salles as $salle)
+                          @forelse($salles as $salle)
                               <tr>
                                   <td>{{ $salle->name }}</td>
                                   <td>{{ $salle->capacity }}</td>
@@ -71,7 +71,7 @@
       <div class="row">
           <div class="col">
               <div class="mt-3">
-                  {{ $Salles->links() }}
+                  {{ $salles->links() }}
               </div>
           </div>
           <div class="col">

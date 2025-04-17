@@ -24,6 +24,14 @@ class Reservation extends Model
         'actions',
     ];
 
+    protected $fillable = [
+        'user_id',
+        'salle_id',
+        'date',
+        'heure_debut',
+        'heure_fin',
+    ];
+
     /** @return string  */
     public function getActionsAttribute()
     {

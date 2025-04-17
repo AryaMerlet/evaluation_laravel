@@ -21,10 +21,12 @@ return new class extends Migration
 
         $schema->create('salles', function (ExtendBlueprint $table) {
             $table->id();
-
             $table->string('name')->unique();
             $table->integer('capacity');
             $table->float('surface');
+            $table->string('equipments');
+            $table->string('description');
+            $table->boolean('available')->default(true);
 
             $table->whoAndWhen();
         });

@@ -23,6 +23,13 @@ class Salle extends Model
         'actions',
     ];
 
+    protected $fillable = [
+        'nom',
+        'capacity',
+        'surface',
+        'available'
+    ];
+
     /** @return string  */
     public function getActionsAttribute()
     {

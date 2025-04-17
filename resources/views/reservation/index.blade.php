@@ -17,9 +17,10 @@
                   <table id="ReservationsTable" class="table table-striped table-hover">
                       <thead>
                           <tr>
-                              <th>Nom</th>
-                              <th>Capacité</th>
-                              <th>Surface</th>
+                              <th>Salarié</th>
+                              <th>Nom de la salle</th>
+                              <th>date de réservation</th>
+                              <th>Heure de la réservation</th>
                               @auth
                                   @can('reservation-update')
                                       <th>Actions</th>
@@ -28,12 +29,12 @@
                           </tr>
                       </thead>
                       <tbody>
-                          @forelse($Reservations as $reservation)
+                          @forelse($reservations as $reservation)
                               <tr>
                                   <td>{{ $reservation->user->first_name .' '. $reservation->user->last_name }}</td>
                                   <td>{{ $reservation->salle->name }}</td>
-                                  <td>{{ $reservation->date_debut }}</td>
-                                  <td>{{ $reservation->date_fin }}</td>
+                                  <td>{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</td>
+                                  <td>{{ \Carbon\Carbon::parse($reservation->heure_debut)->format('H:i') .' - '. \Carbon\Carbon::parse($reservation->heure_fin)->format('H:i') }}</td>
                                   @auth
                                     <td class="d-flex">
                                       @can('reservation-update')
@@ -72,7 +73,7 @@
       <div class="row">
           <div class="col">
               <div class="mt-3">
-                  {{ $Reservations->links() }}
+                  {{ $reservations->links() }}
               </div>
           </div>
       </div>

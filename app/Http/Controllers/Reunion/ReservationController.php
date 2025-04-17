@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reunion;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Reunion\ReservationModelRequest;
 use App\Http\Services\Reunion\ReservationService;
 use App\Models\Reunion\Reservation;
@@ -13,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 use Session;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -46,8 +48,18 @@ class ReservationController extends Controller
      */
     public function index()
     {
+        /**
+         * @var \App\Models\User
+         */
+        $user = Auth::user();
+
         if ($this->can(self::ABILITY . '-retrieve')) {
-            return view(self::PATH_VIEWS . '.index');
+            if ($user->role == 'admin') {
+                $reservations = Reservation::with('user','salle')->paginate(10);
+            } else {
+                $reservations = Reservation::where('user_id', $user->id)->with('user','salle')->paginate(10);
+            }
+            return view(self::PATH_VIEWS . '.index', compact('reservations'));
         }
     }
 

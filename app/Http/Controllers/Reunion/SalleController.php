@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reunion;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Reunion\SalleModelRequest;
 use App\Http\Services\Reunion\SalleService;
 use App\Models\Reunion\Salle;

@@ -5,7 +5,7 @@
   </div>
 
   <div class="d-flex-block m-auto h6">
-    Gestion du planning
+    Gestion des salles de réunions
   </div>
 
   <div class="dropdown">
