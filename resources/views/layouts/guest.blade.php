@@ -7,10 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta name="description" content="Gestion du planning des équipes">
-  <meta name="author" content="Wiklog">
+  {{-- <meta name="author" content="Wiklog"> --}}
   <meta name="keyword" content="Gestion du planning des équipes">
 
-  <title>{{ $title }}</title>
+  {{-- <title>{{ $title }}</title> --}}
 
   {{-- favicon --}}
   <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicon/apple-icon-57x57.png') }}">
